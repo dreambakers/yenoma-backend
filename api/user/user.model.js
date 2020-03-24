@@ -30,6 +30,8 @@ const UserSchema = new mongoose.Schema({
         }
     }],
     polls: [ mongoose.Schema.Types.ObjectId ]
+},{
+    timestamps: true
 });
 
 UserSchema.post('save', (error, doc, next) => {

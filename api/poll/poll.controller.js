@@ -50,13 +50,19 @@ const getPoll = async (req, res) => {
 
 const getPolls = async ({ user }, res) => {
     try {
-        const polls = await Poll.find({ createdBy: user._id, status: { $in: ['open', 'terminated']} }).populate('createdBy');
-
+        let polls = await Poll.find({ createdBy: user._id, status: { $in: ['open', 'terminated']} }).lean();
+        const responsesCountPromises = [];
+        polls.forEach(poll => {
+            responsesCountPromises.push(new Promise(async (resolve, reject) => {
+                poll['responses'] = await Response.countDocuments({ for: poll._id }).catch(e => reject(e));
+                resolve();
+            }));
+        });
+        await Promise.all(responsesCountPromises);
         res.json({
             success: 1,
             polls
         });
-
     } catch (error) {
         console.log(error);
         res.json({
@@ -66,9 +72,9 @@ const getPolls = async ({ user }, res) => {
     }
 }
 
-const updatePoll = async ({ body: { poll } }, res) => {
+const updatePoll = async ({ body: { poll }, user }, res) => {
     try {
-        await Poll.updateOne({ _id: poll._id,  }, poll);
+        await Poll.updateOne({ _id: poll._id, createdBy: user._id  }, poll);
         res.json({
             success: 1,
         });
@@ -83,7 +89,7 @@ const updatePoll = async ({ body: { poll } }, res) => {
 
 const deletePoll = async (req, res) => {
     try {
-        await Poll.updateOne({ _id: req.params.id,  }, {status: 'deleted'});
+        await Poll.updateOne({ _id: req.params.id, createdBy: req.user._id }, {status: 'deleted'});
         res.json({
             success: 1,
         });
@@ -98,7 +104,7 @@ const deletePoll = async (req, res) => {
 
 const terminatePoll = async (req, res) => {
     try {
-        await Poll.updateOne({ _id: req.params.id,  }, {status: 'terminated'});
+        await Poll.updateOne({ _id: req.params.id, createdBy: req.user._id  }, {status: 'terminated'});
         res.json({
             success: 1,
         });
@@ -113,7 +119,7 @@ const terminatePoll = async (req, res) => {
 
 const restorePoll = async (req, res) => {
     try {
-        await Poll.updateOne({ _id: req.params.id,  }, {status: 'open'});
+        await Poll.updateOne({ _id: req.params.id, createdBy: req.user._id }, {status: 'open'});
         res.json({
             success: 1,
         });

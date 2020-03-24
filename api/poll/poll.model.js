@@ -7,10 +7,9 @@ const pollSchema = new mongoose.Schema({
             options: [{
                 type: String,
             }],
-            answer: String,
             answerType: {
                 type: String,
-                enum: ['binary', 'rating'],
+                enum: ['binary', 'rating', 'yesNoMaybe', 'slider', 'radioButton', 'checkbox'],
                 default: 'binary'
             }
         }
@@ -24,6 +23,8 @@ const pollSchema = new mongoose.Schema({
     title: String,
     description: String,
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
+}, {
+    timestamps: true
 });
 
 const Poll = mongoose.model('Poll', pollSchema);

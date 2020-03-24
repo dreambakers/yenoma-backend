@@ -1,4 +1,5 @@
 const { mongoose } = require('../../db/connection');
+const Schema = mongoose.Schema;
 
 const responseSchema = new mongoose.Schema({
     questions: [
@@ -8,18 +9,20 @@ const responseSchema = new mongoose.Schema({
             answers: [{
                 _id: false,
                 option: String,
-                answer: String
+                answer: Schema.Types.Mixed
             }],
             // In case no options defined for question
-            answer: String,
+            answer: Schema.Types.Mixed,
             answerType:  {
                 type: String,
-                enum: ['binary', 'rating'],
+                enum: ['binary', 'rating', 'yesNoMaybe', 'slider', 'radioButton', 'checkbox'],
                 default: 'binary'
             }
         }
     ],
-    for: { type:  mongoose.Schema.Types.ObjectId, ref: 'Poll' },
+    for: { type: mongoose.Schema.Types.ObjectId, ref: 'Poll' },
+}, {
+    timestamps: true
 });
 
 const Response = mongoose.model('Response', responseSchema);
