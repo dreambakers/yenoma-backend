@@ -22,6 +22,7 @@ const pollSchema = new mongoose.Schema({
     },
     title: String,
     description: String,
+    privateNote: String,
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
 }, {
     timestamps: true
