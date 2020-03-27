@@ -20,6 +20,8 @@ const responseSchema = new mongoose.Schema({
             }
         }
     ],
+    name: String,
+    comments: String,
     for: { type: mongoose.Schema.Types.ObjectId, ref: 'Poll' },
 }, {
     timestamps: true

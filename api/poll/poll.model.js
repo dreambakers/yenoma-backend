@@ -23,7 +23,9 @@ const pollSchema = new mongoose.Schema({
     title: String,
     description: String,
     privateNote: String,
-    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
+    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    allowNames: Boolean,
+    allowComments: Boolean
 }, {
     timestamps: true
 });
