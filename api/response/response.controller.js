@@ -2,7 +2,6 @@ const { Response } = require('./response.model');
 
 const recordResponse = async ({ body: { response } }, res) => {
     try {
-        console.log(JSON.stringify(response))
         let newResponse = new Response(response);
 
         newResponse = await newResponse.save();

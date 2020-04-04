@@ -48,6 +48,27 @@ const getPoll = async (req, res) => {
     }
 }
 
+const managePoll = async (req, res) => {
+    try {
+        const results = await Promise.all([
+            Poll.findOne({ _id: req.params.id, createdBy: req.user._id }).populate('createdBy'),
+            Response.find({for: req.params.id})
+        ]);
+
+        res.json({
+            success: !!results[0],
+            poll: results[0],
+            responses: results[1]
+        });
+    } catch (error) {
+        console.log(error);
+        res.json({
+            success: 0,
+            msg: 'An error occured while getting the poll'
+        });
+    }
+}
+
 const getPolls = async ({ user }, res) => {
     try {
         let polls = await Poll.find({ createdBy: user._id, status: { $in: ['open', 'terminated']} }).lean();
@@ -74,9 +95,9 @@ const getPolls = async ({ user }, res) => {
 
 const updatePoll = async ({ body: { poll }, user }, res) => {
     try {
-        await Poll.updateOne({ _id: poll._id, createdBy: user._id  }, poll);
+        const result = await Poll.updateOne({ _id: poll._id, createdBy: user._id  }, poll);
         res.json({
-            success: 1,
+            success: result.nModified !== 0,
         });
     } catch (error) {
         console.log(error);
@@ -133,5 +154,5 @@ const restorePoll = async (req, res) => {
 }
 
 module.exports = {
-    createPoll, getPolls, getPoll, updatePoll, deletePoll, terminatePoll, restorePoll
+    createPoll, getPolls, getPoll, updatePoll, deletePoll, terminatePoll, restorePoll, managePoll
 };
