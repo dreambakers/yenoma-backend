@@ -95,7 +95,7 @@ const getPolls = async ({ user }, res) => {
 
 const updatePoll = async ({ body: { poll }, user }, res) => {
     try {
-        const result = await Poll.updateOne({ _id: poll._id, createdBy: user._id  }, poll);
+        const result = await Poll.updateOne({ _id: poll._id, createdBy: user._id, status: 'open' }, poll);
         res.json({
             success: result.nModified !== 0,
         });
