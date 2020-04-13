@@ -7,7 +7,7 @@ const router = express.Router();
 router
     .post('/', authenticate, controller.createPoll)
     .get('/all', authenticate, controller.getPolls)
-    .get('/getPoll/:id', controller.getPoll)
+    .post('/getPoll/:id', controller.getPoll)
     .get('/manage/:id', authenticate, controller.managePoll)
     .post('/update', authenticate, controller.updatePoll)
     .post('/delete/:id', authenticate, controller.deletePoll)

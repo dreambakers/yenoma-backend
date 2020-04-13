@@ -27,18 +27,33 @@ const createPoll = async ({ user, body }, res) => {
 
 const getPoll = async (req, res) => {
     try {
-
         const results = await Promise.all([
             Poll.findById(req.params.id).populate('createdBy'),
             Response.find({for: req.params.id})
         ]);
-
-        res.json({
-            success: 1,
-            poll: results[0],
-            responses: results[1]
-        });
-
+        const poll = results[0];
+        if (poll) {
+            if (poll.password) {
+                if (!req.body.password) {
+                    return res.json({
+                        poll: {},
+                        success: 0,
+                        passwordRequired: true
+                    });
+                } else if (req.body.password !== poll.password) {
+                    return res.json({
+                        success: 0,
+                        incorrectPassword: true
+                    });
+                }
+            }
+            return res.json({
+                success: 1,
+                poll,
+                responses: results[1]
+            });
+        }
+        throw { msg: `No poll found against: ${req.params.id}` };
     } catch (error) {
         console.log(error);
         res.json({
