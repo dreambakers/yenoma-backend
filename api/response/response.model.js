@@ -15,7 +15,7 @@ const responseSchema = new mongoose.Schema({
             answer: Schema.Types.Mixed,
             answerType:  {
                 type: String,
-                enum: ['binary', 'rating', 'yesNoMaybe', 'slider', 'radioButton', 'checkbox'],
+                enum: ['binary', 'rating', 'yesNoMaybe', 'slider', 'radioButton', 'checkbox', 'smiley'],
                 default: 'binary'
             }
         }

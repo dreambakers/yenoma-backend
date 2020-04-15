@@ -9,7 +9,7 @@ const pollSchema = new mongoose.Schema({
             }],
             answerType: {
                 type: String,
-                enum: ['binary', 'rating', 'yesNoMaybe', 'slider', 'radioButton', 'checkbox'],
+                enum: ['binary', 'rating', 'yesNoMaybe', 'slider', 'radioButton', 'checkbox', 'smiley'],
                 default: 'binary'
             }
         }
