@@ -26,7 +26,9 @@ const pollSchema = new mongoose.Schema({
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     allowNames: Boolean,
     allowComments: Boolean,
-    password: String
+    password: String,
+    inactiveComment: String,
+    activeComment: String
 }, {
     timestamps: true
 });
