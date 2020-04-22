@@ -10,5 +10,6 @@ router
     .get('/getResponseForPoll/:pollId', authenticate, controller.getResponseForPoll)
     .get('/:responseId', authenticate, controller.getResponse)
     .delete('/:responseId', authenticate, controller.deleteResponse)
+    .get('/verify/:responseId', controller.verifyValidity)
 
 module.exports = router;

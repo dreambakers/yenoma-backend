@@ -7,7 +7,7 @@ const recordResponse = async ({ body: { response } }, res) => {
         newResponse = await newResponse.save();
 
         res.json({
-            success: 1,
+            success: !!newResponse,
             response: newResponse
         });
     } catch (error) {
@@ -24,7 +24,7 @@ const updateResponse = async ({ body: { response } }, res) => {
     try {
         const updatedResponse = await Response.findOneAndUpdate({ _id: response._id }, response, { new: true });
         res.json({
-            success: 1,
+            success: !!updatedResponse,
             response: updatedResponse
         });
     } catch (error) {
@@ -101,6 +101,21 @@ const deleteResponse = async ( { params, user }, res) => {
     }
 }
 
+const verifyValidity = async ( { params, user }, res) => {
+    try {
+        const response = await Response.findById(params.responseId);
+        return res.json({
+            success: !!response,
+        });
+    } catch (error) {
+        console.log(error);
+        res.json({
+            success: 0,
+            msg: 'An error occured while getting the response'
+        });
+    }
+}
+
 module.exports = {
-    recordResponse, updateResponse, getResponseForPoll, getResponse, deleteResponse
+    recordResponse, updateResponse, getResponseForPoll, getResponse, deleteResponse, verifyValidity
 };
