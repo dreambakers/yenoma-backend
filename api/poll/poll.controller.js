@@ -169,6 +169,8 @@ const duplicatePoll = async (req, res) => {
         if (poll) {
             delete poll['_id'];
             delete poll['shortId'];
+            delete poll['createdAt'];
+            delete poll['updatedAt'];
             poll.isNew = true;
 
             const newPoll = new Poll(poll);
