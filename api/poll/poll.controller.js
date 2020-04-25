@@ -8,9 +8,6 @@ const createPoll = async ({ user, body }, res) => {
         const newPoll = new Poll({...poll, createdBy: user._id });
         poll = await newPoll.save();
 
-        user.polls.push(poll._id);
-        await user.save();
-
         res.json({
             success: 1,
             poll
@@ -27,11 +24,8 @@ const createPoll = async ({ user, body }, res) => {
 
 const getPoll = async (req, res) => {
     try {
-        const results = await Promise.all([
-            Poll.findById(req.params.id).populate('createdBy'),
-            Response.find({for: req.params.id})
-        ]);
-        const poll = results[0];
+        const pollId = req.params.id;
+        const poll = await Poll.findOne({ shortId: pollId }).populate('createdBy');
         if (poll) {
             if (poll.password) {
                 if (!req.body.password) {
@@ -47,10 +41,11 @@ const getPoll = async (req, res) => {
                     });
                 }
             }
+            const responses = await Response.find({ for: poll._id });
             return res.json({
                 success: 1,
                 poll,
-                responses: results[1]
+                responses
             });
         }
         throw { msg: `No poll found against: ${req.params.id}` };

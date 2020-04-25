@@ -29,7 +29,6 @@ const UserSchema = new mongoose.Schema({
             required: true
         }
     }],
-    polls: [ mongoose.Schema.Types.ObjectId ]
 },{
     timestamps: true
 });
