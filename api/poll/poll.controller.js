@@ -163,6 +163,33 @@ const restorePoll = async (req, res) => {
     }
 }
 
+const duplicatePoll = async (req, res) => {
+    try {
+        let poll = await Poll.findOne({ _id: req.params.id, createdBy: req.user._id }).lean();
+        if (poll) {
+            delete poll['_id'];
+            delete poll['shortId'];
+            poll.isNew = true;
+
+            const newPoll = new Poll(poll);
+            poll = (await newPoll.save()).toObject();
+
+            res.json({
+                success: !!poll,
+                poll: { ...poll, responses: 0 }
+            });
+        } else {
+            throw { msg: `No poll found against poll id ${req.params.id}, createdBy: ${req.user._id}` };
+        }
+    } catch (error) {
+        console.log(error);
+        res.json({
+            success: 0,
+            msg: 'An error occured while duplicating the poll'
+        });
+    }
+}
+
 module.exports = {
-    createPoll, getPolls, getPoll, updatePoll, deletePoll, terminatePoll, restorePoll, managePoll
+    createPoll, getPolls, getPoll, updatePoll, deletePoll, terminatePoll, restorePoll, managePoll, duplicatePoll
 };

@@ -12,6 +12,7 @@ router
     .post('/update', authenticate, controller.updatePoll)
     .post('/delete/:id', authenticate, controller.deletePoll)
     .post('/terminate/:id', authenticate, controller.terminatePoll)
-    .post('/restore/:id', authenticate, controller.restorePoll);
+    .post('/restore/:id', authenticate, controller.restorePoll)
+    .post('/duplicate/:id', authenticate, controller.duplicatePoll);
 
 module.exports = router;
