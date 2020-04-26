@@ -28,7 +28,10 @@ const responseSchema = new mongoose.Schema({
                     'value'
                 ],
                 default: 'binary'
-            }
+            },
+            decimalPlaces: Number,
+            minValue: Number,
+            maxValue: Number,
         }
     ],
     name: String,
