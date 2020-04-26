@@ -24,7 +24,8 @@ const responseSchema = new mongoose.Schema({
                     'checkbox',
                     'smiley',
                     'text',
-                    'dropdown'
+                    'dropdown',
+                    'value'
                 ],
                 default: 'binary'
             }

@@ -18,10 +18,14 @@ const pollSchema = new mongoose.Schema({
                     'checkbox',
                     'smiley',
                     'text',
-                    'dropdown'
+                    'dropdown',
+                    'value'
                 ],
                 default: 'binary'
-            }
+            },
+            decimalPlaces: Number,
+            minValue: Number,
+            maxValue: Number,
         }
     ],
 
