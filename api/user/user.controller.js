@@ -23,8 +23,9 @@ const signUp = async (req, res) => {
 
 const login = async (req, res) => {
     try {
-        const user = await User.findByCredentials(req.body.email, req.body.password);
-        const token = await user.generateAuthToken();
+        const { email, password, remember } = req.body;
+        const user = await User.findByCredentials(email, password);
+        const token = await user.generateAuthToken(remember);
         res.header('x-auth', token).send(user);
     } catch (error) {
         console.log(error);

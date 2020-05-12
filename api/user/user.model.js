@@ -23,11 +23,12 @@ const UserSchema = new mongoose.Schema({
             type: String,
             required: true
         },
-
         token: {
             type: String,
             required: true
-        }
+        },
+        lastUse: { type: Date },
+        remember: { type: Boolean, default: false }
     }],
 },{
     timestamps: true
@@ -51,13 +52,11 @@ UserSchema.methods.toJSON = function () {
     };
 };
 
-UserSchema.methods.generateAuthToken = function () {
+UserSchema.methods.generateAuthToken = function (remember = false) {
     const user = this;
     const access = 'auth';
     const token = jwt.sign({ _id: user._id.toHexString(), access }, 'my secret').toString();
-
-    user.tokens.push({ access, token });
-
+    user.tokens.push({ access, token, lastUse: Date.now(), remember });
     return user.save().then(() => token);
 };
 
