@@ -38,8 +38,7 @@ const authenticate = (req, res, next) => {
 };
 
 const tokenValid = (lastActivity) => {
-    // const THREE_HOURS = 3 * 1000 * 60 * 60;
-    const THREE_HOURS = 10000;
+    const THREE_HOURS = 3 * 1000 * 60 * 60;
     return ((new Date) - lastActivity) < THREE_HOURS;
 }
 
