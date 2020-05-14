@@ -7,5 +7,6 @@ router
     .post('/', controller.signUp)
     .post('/login', controller.login)
     .post('/logout', authenticate, controller.logout)
+    .post('/changePassword', authenticate, controller.changePassword)
 
 module.exports = router;
