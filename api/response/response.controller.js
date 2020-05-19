@@ -1,11 +1,11 @@
 const { Response } = require('./response.model');
+const { Poll } = require('../poll/poll.model');
 
 const recordResponse = async ({ body: { response } }, res) => {
     try {
         let newResponse = new Response(response);
-
         newResponse = await newResponse.save();
-
+        Poll.findByIdAndUpdate(response.for, {$inc : {'responses' : 1}}).exec();
         res.json({
             success: !!newResponse,
             response: newResponse
@@ -86,6 +86,7 @@ const deleteResponse = async ( { params, user }, res) => {
     try {
         const response = await Response.findById(params.responseId).populate('for');
         if (response.for.createdBy.toString() === user._id.toString()) {
+            Poll.findByIdAndUpdate(response.for, {$inc : {'responses' : -1}}).exec();
             await Response.findByIdAndDelete(params.responseId);
             return res.json({
                 success: 1,

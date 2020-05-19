@@ -43,6 +43,8 @@ const pollSchema = new mongoose.Schema({
     password: String,
     inactiveComment: String,
     activeComment: String,
+    terminatedAt: Date,
+    responses: { type: Number, default: 0 },
     shortId: {
         type: String,
         unique: true,

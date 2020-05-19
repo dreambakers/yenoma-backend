@@ -41,11 +41,9 @@ const getPoll = async (req, res) => {
                     });
                 }
             }
-            const responses = await Response.find({ for: poll._id });
             return res.json({
                 success: 1,
-                poll,
-                responses
+                poll
             });
         }
         throw { msg: `No poll found against: ${req.params.id}` };
@@ -82,14 +80,6 @@ const managePoll = async (req, res) => {
 const getPolls = async ({ user }, res) => {
     try {
         let polls = await Poll.find({ createdBy: user._id, status: { $in: ['open', 'terminated']} }).lean();
-        const responsesCountPromises = [];
-        polls.forEach(poll => {
-            responsesCountPromises.push(new Promise(async (resolve, reject) => {
-                poll['responses'] = await Response.countDocuments({ for: poll._id }).catch(e => reject(e));
-                resolve();
-            }));
-        });
-        await Promise.all(responsesCountPromises);
         res.json({
             success: 1,
             polls
@@ -135,9 +125,18 @@ const deletePoll = async (req, res) => {
 
 const terminatePoll = async (req, res) => {
     try {
-        await Poll.updateOne({ _id: req.params.id, createdBy: req.user._id  }, {status: 'terminated'});
+        const updatedPoll = await Poll.findOneAndUpdate({
+            _id: req.params.id,
+            createdBy: req.user._id
+        }, {
+            status: 'terminated',
+            terminatedAt: Date.now()
+        }, {
+            new: true
+        });
         res.json({
-            success: 1,
+            success: !!updatedPoll,
+            poll: updatedPoll
         });
     } catch (error) {
         console.log(error);
@@ -150,9 +149,18 @@ const terminatePoll = async (req, res) => {
 
 const restorePoll = async (req, res) => {
     try {
-        await Poll.updateOne({ _id: req.params.id, createdBy: req.user._id }, {status: 'open'});
+        const updatedPoll = await Poll.findOneAndUpdate({
+            _id: req.params.id,
+            createdBy: req.user._id
+        }, {
+            status: 'open',
+            $unset: { terminatedAt: 1 }
+        }, {
+            new: true
+        });
         res.json({
-            success: 1,
+            success: !!updatedPoll,
+            poll: updatedPoll
         });
     } catch (error) {
         console.log(error);
@@ -171,6 +179,7 @@ const duplicatePoll = async (req, res) => {
             delete poll['shortId'];
             delete poll['createdAt'];
             delete poll['updatedAt'];
+            delete poll['responses'];
             poll.isNew = true;
 
             const newPoll = new Poll(poll);
@@ -178,7 +187,7 @@ const duplicatePoll = async (req, res) => {
 
             res.json({
                 success: !!poll,
-                poll: { ...poll, responses: 0 }
+                poll
             });
         } else {
             throw { msg: `No poll found against poll id ${req.params.id}, createdBy: ${req.user._id}` };
