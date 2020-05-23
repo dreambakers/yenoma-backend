@@ -48,7 +48,8 @@ const pollSchema = new mongoose.Schema({
     shortId: {
         type: String,
         unique: true,
-    }
+    },
+    automaticNumbering: Boolean
 }, {
     timestamps: true
 });
