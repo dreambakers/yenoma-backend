@@ -26,6 +26,10 @@ const pollSchema = new mongoose.Schema({
             decimalPlaces: Number,
             minValue: Number,
             maxValue: Number,
+            limits: {
+                minChecks: Number,
+                maxChecks: Number
+            }
         }
     ],
 
