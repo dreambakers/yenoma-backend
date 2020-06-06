@@ -29,7 +29,8 @@ const pollSchema = new mongoose.Schema({
             limits: {
                 minChecks: Number,
                 maxChecks: Number
-            }
+            },
+            allowOtherAnswer: Boolean
         }
     ],
 
