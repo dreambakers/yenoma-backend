@@ -32,8 +32,7 @@ const responseSchema = new mongoose.Schema({
             decimalPlaces: Number,
             minValue: Number,
             maxValue: Number,
-            otherAnswer: String,
-            hasOtherAnswer: Boolean
+            otherAnswer: String
         }
     ],
     name: String,
