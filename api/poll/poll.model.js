@@ -30,7 +30,8 @@ const pollSchema = new mongoose.Schema({
                 minChecks: Number,
                 maxChecks: Number
             },
-            allowOtherAnswer: Boolean
+            allowOtherAnswer: Boolean,
+            radioToDropdown: Boolean
         }
     ],
 
@@ -54,7 +55,9 @@ const pollSchema = new mongoose.Schema({
         type: String,
         unique: true,
     },
-    automaticNumbering: Boolean
+    automaticNumbering: Boolean,
+    thankYouTitle: String,
+    thankYouMessage: String
 }, {
     timestamps: true
 });

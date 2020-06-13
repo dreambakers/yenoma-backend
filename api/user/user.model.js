@@ -131,6 +131,22 @@ UserSchema.methods.removeToken = function (token) {
     });
   };
 
+UserSchema.methods.cleanupOldTokens = async function() {
+    try {
+        const user = this;
+        await user.updateOne({
+            $pull: {
+                tokens: {
+                    lastUse: { $lt: new Date(Date.now() - 24 * 60 * 60 * 1000) },
+                },
+            },
+        }).exec();
+        return true;
+    } catch (error) {
+        console.log('Error performing token cleanup', error);
+        return Promise.reject();
+    }
+};
 
 const User = mongoose.model('User', UserSchema);
 module.exports = { User };
