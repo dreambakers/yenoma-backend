@@ -67,6 +67,16 @@ const logout = async ({ user, token }, res) => {
     }
 }
 
+const refreshToken = async (req, res) => {
+    try {
+        res.json({
+            success: 1
+        });
+    } catch (error) {
+        console.log('An error occurred refreshing the token', error);
+    }
+}
+
 module.exports = {
-    login, signUp, logout, changePassword
+    login, signUp, logout, changePassword, refreshToken
 }

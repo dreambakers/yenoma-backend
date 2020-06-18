@@ -8,5 +8,6 @@ router
     .post('/login', controller.login)
     .post('/logout', authenticate, controller.logout)
     .post('/changePassword', authenticate, controller.changePassword)
+    .post('/refreshToken', authenticate, controller.refreshToken)
 
 module.exports = router;
