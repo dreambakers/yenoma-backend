@@ -25,7 +25,8 @@ const responseSchema = new mongoose.Schema({
                     'smiley',
                     'text',
                     'dropdown',
-                    'value'
+                    'value',
+                    'email'
                 ],
                 default: 'binary'
             },
