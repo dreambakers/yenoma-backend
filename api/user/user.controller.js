@@ -6,7 +6,22 @@ const signUp = async (req, res) => {
         const newUser = new User({
             email: req.body.email,
             password: req.body.password,
+            username: req.body.username
         });
+
+        const results = await Promise.all([
+            User.findOne({ email: newUser.email }),
+            User.findOne({ username: newUser.username })
+        ]);
+
+        if (results[0] || results[1]) {
+            return res.status(400).send({
+                alreadyExists: 1,
+                email: !!results[0],
+                username: !!results[1],
+                success: 0
+            });
+        }
 
         const user = await newUser.save();
         const token = await user.generateAuthToken();
@@ -16,7 +31,6 @@ const signUp = async (req, res) => {
     catch (error) {
         console.log(error);
         res.status(400).send({
-            alreadyExists: error.alreadyExists || 0,
             success: 0
         });
     }

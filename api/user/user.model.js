@@ -4,6 +4,18 @@ const validator = require('validator');
 const bcrypt = require('bcryptjs');
 
 const UserSchema = new mongoose.Schema({
+    username: {
+        unique: true,
+        type: String,
+        required: true,
+        validate: {
+            validator: function(v) {
+                return /^[a-zA-Z0-9]+$/.test(v);
+            },
+            minlength: 5,
+            message: '{VALUE} is not a valid username',
+        },
+    },
     email: {
         unique: true,
         type: String,
@@ -34,20 +46,13 @@ const UserSchema = new mongoose.Schema({
     timestamps: true
 });
 
-UserSchema.post('save', (error, doc, next) => {
-    if (error.name === 'MongoError' && error.code === 11000) {
-        next({ alreadyExists: 1});
-    } else {
-        next(error);
-    }
-});
-
 UserSchema.methods.toJSON = function () {
     let user = this;
     let userObject = user.toObject();
 
     return {
         email: userObject.email,
+        username: userObject.username,
         _id: userObject._id
     };
 };
