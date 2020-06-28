@@ -42,6 +42,7 @@ const UserSchema = new mongoose.Schema({
         lastUse: { type: Date },
         remember: { type: Boolean, default: false }
     }],
+    country: String
 },{
     timestamps: true
 });
@@ -53,6 +54,7 @@ UserSchema.methods.toJSON = function () {
     return {
         email: userObject.email,
         username: userObject.username,
+        country: userObject.country,
         _id: userObject._id
     };
 };

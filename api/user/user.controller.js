@@ -91,6 +91,49 @@ const refreshToken = async (req, res) => {
     }
 }
 
+const getProfile = async (req, res) => {
+    try {
+        const user = await User.findOne({ _id: req.user._id });
+        res.json({
+            user,
+            success: !!user,
+        });
+    } catch (error) {
+        console.log('An error occurred getting the user profile', error);
+    }
+}
+
+const updateProfile = async (req, res) => {
+    try {
+        const newProfile = { ...req.body };
+
+        if (newProfile.email || newProfile.username) {
+            const results = await Promise.all([
+                User.findOne({ email: newProfile.email, _id: { $ne: req.user._id } }),
+                User.findOne({ username: newProfile.username, _id: { $ne: req.user._id } })
+            ]);
+
+            if (results[0] || results[1]) {
+                return res.status(400).send({
+                    alreadyExists: 1,
+                    email: !!results[0],
+                    username: !!results[1],
+                    success: 0
+                });
+            }
+
+        }
+
+        delete newProfile['_id'];
+        const result = await User.updateOne({ _id: req.user._id }, newProfile);
+        res.json({
+            success: result.nModified !== 0,
+        });
+    } catch (error) {
+        console.log('An error occurred updating the user profile', error);
+    }
+}
+
 module.exports = {
-    login, signUp, logout, changePassword, refreshToken
+    login, signUp, logout, changePassword, refreshToken, updateProfile, getProfile
 }

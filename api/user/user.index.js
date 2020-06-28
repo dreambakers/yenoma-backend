@@ -9,5 +9,8 @@ router
     .post('/logout', authenticate, controller.logout)
     .post('/changePassword', authenticate, controller.changePassword)
     .post('/refreshToken', authenticate, controller.refreshToken)
+    .post('/refreshToken', authenticate, controller.refreshToken)
+    .get('/getProfile', authenticate, controller.getProfile)
+    .post('/updateProfile', authenticate, controller.updateProfile);
 
 module.exports = router;
