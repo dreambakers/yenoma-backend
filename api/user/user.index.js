@@ -11,6 +11,8 @@ router
     .post('/refreshToken', authenticate, controller.refreshToken)
     .post('/refreshToken', authenticate, controller.refreshToken)
     .get('/getProfile', authenticate, controller.getProfile)
-    .post('/updateProfile', authenticate, controller.updateProfile);
+    .post('/updateProfile', authenticate, controller.updateProfile)
+    .post('/verifySignup', controller.verifySignup)
+    .post('/sendSignupVerificationEmail', controller.sendSignupVerificationEmail);
 
 module.exports = router;

@@ -1,5 +1,7 @@
-var { User } = require('./user.model');
+const { User } = require('./user.model');
 const bcrypt = require('bcryptjs');
+const { sendEmail } = require('../utility/mail');
+const constants = require('../../constants');
 
 const signUp = async (req, res) => {
     try {
@@ -24,8 +26,20 @@ const signUp = async (req, res) => {
         }
 
         const user = await newUser.save();
-        const token = await user.generateAuthToken();
-        res.header('x-auth', token).send(user);
+        const token = await user.generateVerificationToken();
+        const result = await sendEmail(
+            newUser.email,
+            constants.emailSubjects.signupVerification,
+            constants.emailTemplates.signupVerification,
+            {
+                userEmail: newUser.email,
+                verificationUrl: 'http://localhost:4200/verify?verificationToken=' + token
+            }
+        );
+
+        res.json({
+            success: result.accepted.length
+        });
     }
 
     catch (error) {
@@ -61,6 +75,12 @@ const login = async (req, res) => {
     try {
         const { email, password, remember } = req.body;
         const user = await User.findByCredentials(email, password);
+        if (!user.verified) {
+            return res.json({
+                success: 0,
+                notVerified: true
+            });
+        }
         const token = await user.generateAuthToken(remember);
         user.cleanupOldTokens();
         res.header('x-auth', token).send(user);
@@ -134,6 +154,69 @@ const updateProfile = async (req, res) => {
     }
 }
 
+const verifySignup = async (req, res) => {
+    try {
+        const result = await User.findOneAndUpdate(
+            {
+                verificationToken: req.body.verificationToken
+            },
+            {
+                verified: true,
+                verificationToken: null
+            },
+            {
+            new: true
+            }
+        );
+        res.json({
+            success: !!result.verified,
+        });
+    } catch (error) {
+        console.log('An error occurred verifying the user', error);
+        res.json({
+            success: 0,
+        });
+    }
+}
+
+const sendSignupVerificationEmail = async (req, res) => {
+    try {
+        const user = await User.findOne({ email: req.body.email });
+        if (user) {
+            if (user.verified) {
+                return res.json({
+                    success: 1,
+                    alreadyVerified: true
+                });
+            } else {
+                const token = await user.generateVerificationToken();
+                const result = await sendEmail(
+                    req.body.email,
+                    constants.emailSubjects.signupVerification,
+                    constants.emailTemplates.signupVerification,
+                    {
+                        userEmail: req.body.email,
+                        verificationUrl: 'http://localhost:4200/verify?verificationToken=' + token
+                    }
+                );
+                res.json({
+                    success: result.accepted.length
+                });
+            }
+        } else {
+            res.json({
+                success: 1,
+                userNotFound: true
+            });
+        }
+    } catch (error) {
+        console.log('An error occurred sending the verification email', error);
+        res.json({
+            success: 0,
+        });
+    }
+}
+
 module.exports = {
-    login, signUp, logout, changePassword, refreshToken, updateProfile, getProfile
+    login, signUp, logout, changePassword, refreshToken, updateProfile, getProfile, verifySignup, sendSignupVerificationEmail
 }

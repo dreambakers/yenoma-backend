@@ -42,7 +42,9 @@ const UserSchema = new mongoose.Schema({
         lastUse: { type: Date },
         remember: { type: Boolean, default: false }
     }],
-    country: String
+    country: String,
+    verified: { type: Boolean, default: false },
+    verificationToken: String
 },{
     timestamps: true
 });
@@ -64,6 +66,14 @@ UserSchema.methods.generateAuthToken = function (remember = false) {
     const access = 'auth';
     const token = jwt.sign({ _id: user._id.toHexString(), access }, 'my secret').toString();
     user.tokens.push({ access, token, lastUse: Date.now(), remember });
+    return user.save().then(() => token);
+};
+
+UserSchema.methods.generateVerificationToken = function () {
+    const user = this;
+    const access = 'verification';
+    const token = jwt.sign({ _id: user._id.toHexString(), access }, 'my secret').toString();
+    user.verificationToken = token;
     return user.save().then(() => token);
 };
 

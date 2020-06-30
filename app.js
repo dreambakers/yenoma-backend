@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const https = require('https');
 const cors = require('cors');
 const fs = require('fs');
+require('dotenv').config()
 
 const routes = require('./routes/routes');
 
