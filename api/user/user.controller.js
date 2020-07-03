@@ -253,7 +253,7 @@ const verifyPasswordResetToken = async (req, res) => {
         const user = await User.findOne({ passwordResetToken: req.body.passwordResetToken });
         if (user) {
             try {
-                const decoded = jwt.verify(req.body.passwordResetToken, 'my secret');
+                const decoded = jwt.verify(req.body.passwordResetToken, process.env.JWT_SECRET);
                 return res.json({
                     success: 1
                 });
@@ -279,7 +279,7 @@ const resetPassword = async (req, res) => {
         const user = await User.findOne({ passwordResetToken: req.body.passwordResetToken });
         if (user) {
             try {
-                const decoded = jwt.verify(req.body.passwordResetToken, 'my secret');
+                const decoded = jwt.verify(req.body.passwordResetToken, process.env.JWT_SECRET);
                 user.password = req.body.newPassword;
                 user.passwordResetToken = null;
                 const result = await user.save();
