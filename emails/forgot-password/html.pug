@@ -1,0 +1,52 @@
+head
+  meta(charset='UTF-8')
+  link(href='https://fonts.googleapis.com/css2?family=Raleway&display=swap' rel='stylesheet')
+  style.
+    @font-face {
+    font-family: 'Raleway';
+    font-weight: normal;
+    font-style: normal;
+    }
+    html,
+    body {
+    height: 100%;
+    width: 100%;
+    background-color: #FAFAFA;
+    }
+    .card {
+    background: white;
+    padding: 30px;
+    }
+    .button {
+    width: 140px;
+    cursor: pointer;
+    border: 0;
+    color: white;
+    background-color: #3949AB;
+    border-radius: 5px;
+    padding: 15px;
+    outline: none;
+    }
+    hr {
+    border-color: #ffffff4f;
+    }
+
+table(width='100%' border='0' cellspacing='0' cellpadding='0')
+  tr
+    td(align='center')
+      .card(style='max-width: 500px;')
+        img(src='https://ynm.de/assets/images/logo_cs.png' alt='Logo' title='Logo' style='display:block' width='20' height='20')
+        hr
+        h4
+          | Password reset request received
+        p
+          | Thank your for using Yenoma.
+        p
+          | You can reset your password on Yenoma by clicking
+          | on the button below or use this&nbsp;
+          a(href=`${passwordResetUrl}`) link
+          |  within 48 hours.
+        a(href=`${passwordResetUrl}`)
+          button.button Verify
+        hr(style='margin-top: 20px')
+        p(style='text-align:center') Yenoma, Inc.

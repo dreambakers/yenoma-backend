@@ -13,6 +13,9 @@ router
     .get('/getProfile', authenticate, controller.getProfile)
     .post('/updateProfile', authenticate, controller.updateProfile)
     .post('/verifySignup', controller.verifySignup)
-    .post('/sendSignupVerificationEmail', controller.sendSignupVerificationEmail);
+    .post('/sendSignupVerificationEmail', controller.sendSignupVerificationEmail)
+    .post('/requestPasswordResetEmail', controller.sendPasswordResetEmail)
+    .post('/verifyPasswordResetToken', controller.verifyPasswordResetToken)
+    .post('/resetPassword', controller.resetPassword);
 
 module.exports = router;

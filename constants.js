@@ -1,8 +1,10 @@
 module.exports = {
     emailSubjects: {
-        signupVerification: 'Please verify your email'
+        signupVerification: 'Please verify your email',
+        forgotPassword: 'Password reset request received'
     },
     emailTemplates: {
-        signupVerification: 'signup-verification'
+        signupVerification: 'signup-verification',
+        forgotPassword: 'forgot-password'
     }
 }

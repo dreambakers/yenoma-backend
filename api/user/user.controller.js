@@ -2,6 +2,7 @@ const { User } = require('./user.model');
 const bcrypt = require('bcryptjs');
 const { sendEmail } = require('../utility/mail');
 const constants = require('../../constants');
+const jwt = require('jsonwebtoken');
 
 const signUp = async (req, res) => {
     try {
@@ -26,7 +27,7 @@ const signUp = async (req, res) => {
         }
 
         const user = await newUser.save();
-        const token = await user.generateVerificationToken();
+        const token = await user.generateToken('verification', 'verificationToken');
         const result = await sendEmail(
             newUser.email,
             constants.emailSubjects.signupVerification,
@@ -189,7 +190,7 @@ const sendSignupVerificationEmail = async (req, res) => {
                     alreadyVerified: true
                 });
             } else {
-                const token = await user.generateVerificationToken();
+                const token = await user.generateToken('verification', 'verificationToken');
                 const result = await sendEmail(
                     req.body.email,
                     constants.emailSubjects.signupVerification,
@@ -217,6 +218,105 @@ const sendSignupVerificationEmail = async (req, res) => {
     }
 }
 
+const sendPasswordResetEmail = async (req, res) => {
+    try {
+        const user = await User.findOne({ email: req.body.email });
+        if (user) {
+                const token = await user.generateToken('password', 'passwordResetToken');
+                const result = await sendEmail(
+                    req.body.email,
+                    constants.emailSubjects.forgotPassword,
+                    constants.emailTemplates.forgotPassword,
+                    {
+                        passwordResetUrl: `${process.env.FE_URL}/password-reset?passwordResetToken=` + token
+                    }
+                );
+                res.json({
+                    success: result.accepted.length
+                });
+        } else {
+            res.json({
+                success: 1,
+                userNotFound: true
+            });
+        }
+    } catch (error) {
+        console.log('An error occurred sending the password reset email', error);
+        res.json({
+            success: 0,
+        });
+    }
+}
+
+const verifyPasswordResetToken = async (req, res) => {
+    try {
+        const user = await User.findOne({ passwordResetToken: req.body.passwordResetToken });
+        if (user) {
+            try {
+                const decoded = jwt.verify(req.body.passwordResetToken, 'my secret');
+                return res.json({
+                    success: 1
+                });
+            } catch(err) {
+                return res.json({
+                    success: 0,
+                });
+            }
+        }
+        res.json({
+            success: 0,
+        });
+    } catch (error) {
+        console.log('An error occurred sending the password reset email', error);
+        res.json({
+            success: 0,
+        });
+    }
+}
+
+const resetPassword = async (req, res) => {
+    try {
+        const user = await User.findOne({ passwordResetToken: req.body.passwordResetToken });
+        if (user) {
+            try {
+                const decoded = jwt.verify(req.body.passwordResetToken, 'my secret');
+                user.password = req.body.newPassword;
+                user.passwordResetToken = null;
+                const result = await user.save();
+                res.json({
+                    success: 1
+                });
+            } catch(err) {
+                res.json({
+                    success: 0,
+                    invalidToken: true
+                });
+            }
+        } else {
+            res.json({
+                success: 0,
+                userNotFound: true
+            });
+        }
+    } catch (error) {
+        console.log('An error occurred sending the password reset email', error);
+        res.json({
+            success: 0,
+        });
+    }
+}
+
 module.exports = {
-    login, signUp, logout, changePassword, refreshToken, updateProfile, getProfile, verifySignup, sendSignupVerificationEmail
+    login,
+    signUp,
+    logout,
+    changePassword,
+    refreshToken,
+    updateProfile,
+    getProfile,
+    verifySignup,
+    sendSignupVerificationEmail,
+    sendPasswordResetEmail,
+    resetPassword,
+    verifyPasswordResetToken
 }

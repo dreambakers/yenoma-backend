@@ -44,7 +44,8 @@ const UserSchema = new mongoose.Schema({
     }],
     country: String,
     verified: { type: Boolean, default: false },
-    verificationToken: String
+    verificationToken: String,
+    passwordResetToken: String
 },{
     timestamps: true
 });
@@ -69,11 +70,10 @@ UserSchema.methods.generateAuthToken = function (remember = false) {
     return user.save().then(() => token);
 };
 
-UserSchema.methods.generateVerificationToken = function () {
+UserSchema.methods.generateToken = function (access, key) {
     const user = this;
-    const access = 'verification';
     const token = jwt.sign({ _id: user._id.toHexString(), access }, 'my secret').toString();
-    user.verificationToken = token;
+    user[key] = token;
     return user.save().then(() => token);
 };
 
