@@ -157,20 +157,35 @@ const updateProfile = async (req, res) => {
 
 const verifySignup = async (req, res) => {
     try {
-        const result = await User.findOneAndUpdate(
-            {
-                verificationToken: req.body.verificationToken
-            },
-            {
-                verified: true,
-                verificationToken: null
-            },
-            {
-            new: true
+        const user = await User.findOne({ verificationToken: req.body.verificationToken });
+        if (user) {
+            try {
+                const decoded = jwt.verify(req.body.verificationToken, process.env.JWT_SECRET);
+                const result = await User.findOneAndUpdate(
+                    {
+                        verificationToken: req.body.verificationToken
+                    },
+                    {
+                        verified: true,
+                        verificationToken: null
+                    },
+                    {
+                    new: true
+                    }
+                );
+                return res.json({
+                    success: !!result.verified,
+                });
+            } catch(err) {
+                return res.json({
+                    success: 0,
+                    invalidToken: true
+                });
             }
-        );
+        }
         res.json({
-            success: !!result.verified,
+            success: 0,
+            userNotFound: true
         });
     } catch (error) {
         console.log('An error occurred verifying the user', error);
@@ -190,7 +205,7 @@ const sendSignupVerificationEmail = async (req, res) => {
                     alreadyVerified: true
                 });
             } else {
-                const token = await user.generateToken('verification', 'verificationToken');
+                const token = await user.generateToken('verification', 'verificationToken', '48h');
                 const result = await sendEmail(
                     req.body.email,
                     constants.emailSubjects.signupVerification,
@@ -222,7 +237,7 @@ const sendPasswordResetEmail = async (req, res) => {
     try {
         const user = await User.findOne({ email: req.body.email });
         if (user) {
-                const token = await user.generateToken('password', 'passwordResetToken');
+                const token = await user.generateToken('password', 'passwordResetToken', '48h');
                 const result = await sendEmail(
                     req.body.email,
                     constants.emailSubjects.forgotPassword,

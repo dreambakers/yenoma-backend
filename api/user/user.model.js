@@ -70,9 +70,9 @@ UserSchema.methods.generateAuthToken = function (remember = false) {
     return user.save().then(() => token);
 };
 
-UserSchema.methods.generateToken = function (access, key) {
+UserSchema.methods.generateToken = function (access, key, expiresIn = '365d') {
     const user = this;
-    const token = jwt.sign({ _id: user._id.toHexString(), access }, process.env.JWT_SECRET).toString();
+    const token = jwt.sign({ _id: user._id.toHexString(), access }, process.env.JWT_SECRET, { expiresIn }).toString();
     user[key] = token;
     return user.save().then(() => token);
 };
