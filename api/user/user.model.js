@@ -45,7 +45,18 @@ const UserSchema = new mongoose.Schema({
     country: String,
     verified: { type: Boolean, default: false },
     verificationToken: String,
-    passwordResetToken: String
+    passwordResetToken: String,
+    subscription: {
+        level: {
+            type: 'String',
+            enum: ['Pro', 'Standard'],
+            default: 'Pro'
+        },
+        expires: {
+            type: Date,
+            default: '2099-12-29T19:00:00.000Z' //12/13/2099 @ 12:00am (UTC)
+        }
+    }
 },{
     timestamps: true
 });
@@ -58,7 +69,8 @@ UserSchema.methods.toJSON = function () {
         email: userObject.email,
         username: userObject.username,
         country: userObject.country,
-        _id: userObject._id
+        _id: userObject._id,
+        subscription: userObject.subscription
     };
 };
 

@@ -321,6 +321,24 @@ const resetPassword = async (req, res) => {
     }
 }
 
+const getSubscription = async (req, res) => {
+    try {
+        const user = req.user;
+        res.json({
+            success: 1,
+            subscription: {
+                ...user.subscription,
+                isPro: user.subscription.level === 'Pro' && (new Date() < new Date(user.subscription.expires))
+            }
+        })
+    } catch (error) {
+        console.log('An error occurred while getting the subscription', error);
+        res.json({
+            success: 0,
+        });
+    }
+}
+
 module.exports = {
     login,
     signUp,
@@ -333,5 +351,6 @@ module.exports = {
     sendSignupVerificationEmail,
     sendPasswordResetEmail,
     resetPassword,
-    verifyPasswordResetToken
+    verifyPasswordResetToken,
+    getSubscription
 }
