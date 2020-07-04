@@ -34,7 +34,7 @@ const signUp = async (req, res) => {
             constants.emailTemplates.signupVerification,
             {
                 userEmail: newUser.email,
-                verificationUrl: 'http://localhost:4200/verify?verificationToken=' + token
+                verificationUrl: `${process.env.FE_URL}/verify?verificationToken=` + token
             }
         );
 
