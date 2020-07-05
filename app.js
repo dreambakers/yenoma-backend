@@ -29,7 +29,7 @@ app.use(function (req, res, next) {
   next();
 });
 
-app.get('/', (req, res) => { res.send('Hello world!') });
+app.get('/', (req, res) => { res.send('API is running.') });
 
 app.use('/', routes);
 

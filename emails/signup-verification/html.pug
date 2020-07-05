@@ -1,12 +1,6 @@
 head
   meta(charset='UTF-8')
-  link(href='https://fonts.googleapis.com/css2?family=Raleway&display=swap' rel='stylesheet')
   style.
-    @font-face {
-    font-family: 'Raleway';
-    font-weight: normal;
-    font-style: normal;
-    }
     html,
     body {
     height: 100%;
@@ -30,23 +24,23 @@ head
     hr {
     border-color: #ffffff4f;
     }
+    a {
+      text-decoration: none;
+      color: #3f51b5;
+      font-weight: bold;
+    }
 
 table(width='100%' border='0' cellspacing='0' cellpadding='0')
   tr
     td(align='center')
-      .card(style='max-width: 500px;')
+      .card(style='max-width: 500px; font-family: arial')
         img(src='https://ynm.de/assets/images/logo_em.png' alt='Logo' title='Logo' style='display:block')
         hr
         h4
-          | Verify your e-email to finish signing up for Yenoma
-        p
-          | Thank your for choosing Yenoma.
+          | Thank your for choosing yenoma.
         p
           | Please confirm that #{userEmail} is your email address by clicking
-          | on the button below or use this&nbsp;
-          a(href=`${verificationUrl}`) link
-          |  within 48 hours.
-        a(href=`${verificationUrl}`)
-          button.button Verify
+          | on the link below within 48 hours.
+        a(href=`${verificationUrl}`) Verify
         hr(style='margin-top: 20px')
         p(style='text-align:center') yenoma.com
