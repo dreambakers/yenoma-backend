@@ -5,10 +5,8 @@ const responseSchema = new mongoose.Schema({
     questions: [
         {
             _id: mongoose.Schema.Types.ObjectId,
-            text: String,
             answers: [{
                 _id: false,
-                option: String,
                 answer: Schema.Types.Mixed
             }],
             // In case no options defined for question
