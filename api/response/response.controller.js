@@ -1,11 +1,11 @@
 const { Response } = require('./response.model');
-const { Poll } = require('../poll/poll.model');
+const { Survey } = require('../survey/survey.model');
 
 const recordResponse = async ({ body: { response } }, res) => {
     try {
         let newResponse = new Response(response);
         newResponse = await newResponse.save();
-        Poll.findByIdAndUpdate(response.for, {$inc : {'responses' : 1}}).exec();
+        Survey.findByIdAndUpdate(response.for, {$inc : {'responses' : 1}}).exec();
         res.json({
             success: !!newResponse,
             response: newResponse
@@ -36,7 +36,7 @@ const updateResponse = async ({ body: { response } }, res) => {
     }
 }
 
-const getResponseForPoll = async ( { params, user }, res) => {
+const getResponseForSurvey = async ( { params, user }, res) => {
     try {
         const responses = await Response.find(
             { for: params.pollId }
@@ -53,7 +53,7 @@ const getResponseForPoll = async ( { params, user }, res) => {
                 });
             }
         }
-        throw { msg: `No response found against PollID: ${params.pollId}` };
+        throw { msg: `No response found against SurveyID: ${params.pollId}` };
     } catch (error) {
         console.log(error);
         res.json({
@@ -86,7 +86,7 @@ const deleteResponse = async ( { params, user }, res) => {
     try {
         const response = await Response.findById(params.responseId).populate('for');
         if (response.for.createdBy.toString() === user._id.toString()) {
-            Poll.findByIdAndUpdate(response.for, {$inc : {'responses' : -1}}).exec();
+            Survey.findByIdAndUpdate(response.for, {$inc : {'responses' : -1}}).exec();
             await Response.findByIdAndDelete(params.responseId);
             return res.json({
                 success: 1,
@@ -118,5 +118,5 @@ const verifyValidity = async ( { params, user }, res) => {
 }
 
 module.exports = {
-    recordResponse, updateResponse, getResponseForPoll, getResponse, deleteResponse, verifyValidity
+    recordResponse, updateResponse, getResponseForSurvey, getResponse, deleteResponse, verifyValidity
 };

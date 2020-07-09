@@ -7,7 +7,7 @@ const router = express.Router();
 router
     .post('/', controller.recordResponse)
     .post('/update', controller.updateResponse)
-    .get('/getResponseForPoll/:pollId', authenticate, controller.getResponseForPoll)
+    .get('/getResponseForPoll/:pollId', authenticate, controller.getResponseForSurvey)
     .get('/:responseId', authenticate, controller.getResponse)
     .delete('/:responseId', authenticate, controller.deleteResponse)
     .get('/verify/:responseId', controller.verifyValidity)

@@ -1,6 +1,6 @@
 const { mongoose } = require('../../db/connection');
 
-const pollSchema = new mongoose.Schema({
+const surveySchema = new mongoose.Schema({
     questions: [
         {
             text: String,
@@ -64,7 +64,7 @@ const pollSchema = new mongoose.Schema({
 });
 
 // generating a non-duplicate Code
-pollSchema.pre('save', function(next){  // can't use arror function, or this will be undefinded. fat arrow is lexically scoped.
+surveySchema.pre('save', function(next){  // can't use arror function, or this will be undefinded. fat arrow is lexically scoped.
   let ctx = this;
   attempToGenerate(ctx, next);
 });
@@ -95,7 +95,7 @@ const generateBase58Id = () => {
     return output;
 }
 
-const Poll = mongoose.model('Poll', pollSchema);
+const Survey = mongoose.model('Survey', surveySchema);
 module.exports = {
-    Poll
+    Survey
 };
