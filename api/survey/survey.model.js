@@ -71,8 +71,8 @@ surveySchema.pre('save', function(next){  // can't use arror function, or this w
 
 function attempToGenerate(ctx, callback) {
     let newCode = generateBase58Id();
-    ctx.constructor.findOne({'shortId': newCode}).then((poll) => {
-      if (poll) {
+    ctx.constructor.findOne({'shortId': newCode}).then((survey) => {
+      if (survey) {
         attempToGenerate(ctx, callback);
       }
       else {

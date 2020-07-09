@@ -5,8 +5,8 @@ const createSurvey = async ({ user, body }, res) => {
     try {
         let survey = body.poll;
 
-        const newPoll = new Survey({...survey, createdBy: user._id });
-        survey = await newPoll.save();
+        const newSurvey = new Survey({...survey, createdBy: user._id });
+        survey = await newSurvey.save();
 
         res.json({
             success: 1,
@@ -17,7 +17,7 @@ const createSurvey = async ({ user, body }, res) => {
         console.log(error);
         res.json({
             success: 0,
-            msg: 'An error occured while creating the poll'
+            msg: 'An error occured while creating the survey'
         });
     }
 }
@@ -51,7 +51,7 @@ const getSurvey = async (req, res) => {
         console.log(error);
         res.json({
             success: 0,
-            msg: 'An error occured while getting the poll'
+            msg: 'An error occured while getting the survey'
         });
     }
 }
@@ -72,7 +72,7 @@ const manageSurvey = async (req, res) => {
         console.log(error);
         res.json({
             success: 0,
-            msg: 'An error occured while getting the poll'
+            msg: 'An error occured while getting the survey'
         });
     }
 }
@@ -182,8 +182,8 @@ const duplicateSurvey = async (req, res) => {
             delete survey['responses'];
             survey.isNew = true;
 
-            const newPoll = new Survey(survey);
-            survey = (await newPoll.save()).toObject();
+            const newSurvey = new Survey(survey);
+            survey = (await newSurvey.save()).toObject();
 
             res.json({
                 success: !!survey,
