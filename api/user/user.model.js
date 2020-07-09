@@ -56,7 +56,8 @@ const UserSchema = new mongoose.Schema({
             type: Date,
             default: '2099-12-29T19:00:00.000Z' //12/13/2099 @ 12:00am (UTC)
         }
-    }
+    },
+    readonly: Boolean
 },{
     timestamps: true
 });
@@ -70,7 +71,8 @@ UserSchema.methods.toJSON = function () {
         username: userObject.username,
         country: userObject.country,
         _id: userObject._id,
-        subscription: userObject.subscription
+        subscription: userObject.subscription,
+        readonly: userObject.readonly
     };
 };
 
