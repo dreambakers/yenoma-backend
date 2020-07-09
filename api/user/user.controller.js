@@ -146,9 +146,9 @@ const updateProfile = async (req, res) => {
         }
 
         delete newProfile['_id'];
-        const result = await User.updateOne({ _id: req.user._id }, newProfile);
+        await User.updateOne({ _id: req.user._id }, newProfile);
         res.json({
-            success: result.nModified !== 0,
+            success: 1,
         });
     } catch (error) {
         console.log('An error occurred updating the user profile', error);
