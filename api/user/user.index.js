@@ -17,6 +17,7 @@ router
     .post('/requestPasswordResetEmail', controller.sendPasswordResetEmail)
     .post('/verifyPasswordResetToken', controller.verifyPasswordResetToken)
     .post('/resetPassword', controller.resetPassword)
-    .get('/subscription', authenticate, controller.getSubscription);
+    .get('/subscription', authenticate, controller.getSubscription)
+    .post('/feedback', authenticate, controller.sendFeedback);
 
 module.exports = router;

@@ -339,6 +339,29 @@ const getSubscription = async (req, res) => {
     }
 }
 
+const sendFeedback = async (req, res) => {
+    try {
+        const { feedback } = req.body;
+        const result = await sendEmail(
+            constants.feedbackRecipient,
+            constants.emailSubjects.feedback,
+            constants.emailTemplates.feedback,
+            {
+                userEmail: req.user.email,
+                feedback
+            }
+        );
+        res.json({
+            success: result.accepted.length
+        });
+    } catch (error) {
+        console.log('An error occurred while sending the feedback', error);
+        res.json({
+            success: 0,
+        });
+    }
+}
+
 module.exports = {
     login,
     signUp,
@@ -352,5 +375,6 @@ module.exports = {
     sendPasswordResetEmail,
     resetPassword,
     verifyPasswordResetToken,
-    getSubscription
+    getSubscription,
+    sendFeedback
 }
