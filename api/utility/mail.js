@@ -1,18 +1,18 @@
 const Email = require('email-templates');
 const path = require('path');
+const { translate } = require('../utility/translate');
 
-const sendEmail = async (to, subject, template, locals) => {
-
+const sendEmail = async (to, subjectKey, template, locals, language = 'en') => {
     try {
         const email = new Email({
             template: path.join(__dirname, '..', '..', 'emails', template),
 
             message: {
                 from: 'noreply@yenoma.com',
-                subject,
+                subject: translate(language, subjectKey.split('.')[0], subjectKey.split('.')[1]),
                 to,
             },
-            locals,
+            locals: { ...locals, translate, language },
             send: true,
             transport: {
                 host: "smtp.strato.de",
@@ -27,7 +27,7 @@ const sendEmail = async (to, subject, template, locals) => {
 
         return await email.send({
             template: template,
-            locals
+            locals: { ...locals, translate, language },
         });
     } catch (error) {
         throw error;

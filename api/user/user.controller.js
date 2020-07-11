@@ -35,7 +35,8 @@ const signUp = async (req, res) => {
             {
                 userEmail: newUser.email,
                 verificationUrl: `${process.env.FE_URL}/verify?verificationToken=` + token
-            }
+            },
+            req.body.language
         );
 
         res.json({
@@ -213,7 +214,8 @@ const sendSignupVerificationEmail = async (req, res) => {
                     {
                         userEmail: req.body.email,
                         verificationUrl: `${process.env.FE_URL}/verify?verificationToken=` + token
-                    }
+                    },
+                    req.body.language
                 );
                 res.json({
                     success: result.accepted.length
@@ -244,7 +246,8 @@ const sendPasswordResetEmail = async (req, res) => {
                     constants.emailTemplates.forgotPassword,
                     {
                         passwordResetUrl: `${process.env.FE_URL}/password-reset?passwordResetToken=` + token
-                    }
+                    },
+                    req.body.language
                 );
                 res.json({
                     success: result.accepted.length

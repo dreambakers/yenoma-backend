@@ -37,10 +37,9 @@ table(width='100%' border='0' cellspacing='0' cellpadding='0')
         img(src='https://ynm.de/assets/images/logo_em.png' alt='Logo' title='Logo' style='display:block')
         hr
         h4
-          | Thank your for choosing yenoma.
+          | !{translate(`${language}`, 'messages', 'thankYouForUsing')}
         p
-          | Please confirm that #{userEmail} is your email address by clicking
-          | on the link below within 48 hours.
-        a(href=`${verificationUrl}`) Verify
+          | !{translate(`${language}`, 'messages', 'emailConfirmation1')} #{userEmail} !{translate(`${language}`, 'messages', 'emailConfirmation2')}.
+        a(href=`${verificationUrl}`) !{translate(`${language}`, 'labels', 'verify')}
         hr(style='margin-top: 20px')
         p(style='text-align:center') yenoma.com

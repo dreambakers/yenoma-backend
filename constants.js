@@ -1,9 +1,9 @@
 module.exports = {
     feedbackRecipient: 'feedback@yenoma.com',
     emailSubjects: {
-        signupVerification: 'Please verify your email',
-        forgotPassword: 'Password reset request received',
-        feedback: 'Feedback received from yenoma user'
+        signupVerification: 'messages.verifyYourEmail',
+        forgotPassword: 'messages.passwordResetRequestReceived',
+        feedback: 'messages.feedbackReceived'
     },
     emailTemplates: {
         signupVerification: 'signup-verification',
