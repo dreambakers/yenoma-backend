@@ -32,7 +32,8 @@ const surveySchema = new mongoose.Schema({
                 maxChecks: Number
             },
             allowOtherAnswer: Boolean,
-            radioToDropdown: Boolean
+            radioToDropdown: Boolean,
+            additionalText: String
         }
     ],
 
