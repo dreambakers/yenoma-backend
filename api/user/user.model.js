@@ -47,11 +47,6 @@ const UserSchema = new mongoose.Schema({
     verificationToken: String,
     passwordResetToken: String,
     subscription: {
-        level: {
-            type: 'String',
-            enum: ['Pro', 'Standard'],
-            default: 'Pro'
-        },
         expires: {
             type: Date,
             default: '2099-12-29T19:00:00.000Z' //12/13/2099 @ 12:00am (UTC)

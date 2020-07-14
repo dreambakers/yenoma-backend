@@ -331,7 +331,7 @@ const getSubscription = async (req, res) => {
             success: 1,
             subscription: {
                 ...user.subscription,
-                isPro: user.subscription.level === 'Pro' && (new Date() < new Date(user.subscription.expires))
+                isPro: new Date() < new Date(user.subscription.expires)
             }
         })
     } catch (error) {
