@@ -6,8 +6,7 @@ module.exports = {
         thankYouForUsing: "Thank you for using yenoma _de",
         youCanChangePassword: "You can change your password by clicking on the link below within 48 hours. _de",
         feedbackReceivedFromYenomaUser: "feedback received from yenoma user _de",
-        emailConfirmation1: "Please confirm that _de",
-        emailConfirmation2: "is your email address by clicking on the link below within 48 hours. _de",
+        emailConfirmation: "Please confirm that {{email}} is your email address by clicking on the link below within 48 hours _de",
     },
 
     labels: {
