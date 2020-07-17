@@ -1,4 +1,5 @@
 module.exports = {
+    newUserSubscriptionPeriod: 30, // days
     feedbackRecipient: 'feedback@yenoma.com',
     emailSubjects: {
         signupVerification: 'messages.verifyYourEmail',

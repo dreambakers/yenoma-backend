@@ -2,6 +2,7 @@ const { mongoose } = require('../../db/connection');
 const jwt = require('jsonwebtoken');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
+const constants = require('../../constants');
 
 const UserSchema = new mongoose.Schema({
     username: {
@@ -49,7 +50,7 @@ const UserSchema = new mongoose.Schema({
     subscription: {
         expires: {
             type: Date,
-            default: '2099-12-29T19:00:00.000Z' //12/13/2099 @ 12:00am (UTC)
+            default: new Date().setDate(new Date().getDate() + constants.newUserSubscriptionPeriod)
         }
     },
     readonly: Boolean
