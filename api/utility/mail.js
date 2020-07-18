@@ -1,6 +1,7 @@
 const Email = require('email-templates');
 const path = require('path');
 const { translate } = require('../utility/translate');
+const constants = require('../../constants');
 
 const sendEmail = async (to, subjectKey, template, locals, language = 'en') => {
     try {
@@ -8,7 +9,7 @@ const sendEmail = async (to, subjectKey, template, locals, language = 'en') => {
             template: path.join(__dirname, '..', '..', 'emails', template),
 
             message: {
-                from: 'noreply@yenoma.com',
+                from: constants.emailSenderName,
                 subject: translate(language, subjectKey.split('.')[0], subjectKey.split('.')[1]),
                 to,
             },

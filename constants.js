@@ -1,5 +1,6 @@
 module.exports = {
     newUserSubscriptionPeriod: 30, // days
+    emailSenderName: 'yenoma <noreply@yenoma.com>',
     feedbackRecipient: 'feedback@yenoma.com',
     emailSubjects: {
         signupVerification: 'messages.verifyYourEmail',
