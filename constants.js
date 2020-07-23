@@ -11,5 +11,20 @@ module.exports = {
         signupVerification: 'signup-verification',
         forgotPassword: 'forgot-password',
         feedback: 'feedback'
-    }
+    },
+    answerTypes: [
+        'binary',
+        'rating',
+        'yesNoMaybe',
+        'slider',
+        'radioButton',
+        'checkbox',
+        'smiley',
+        'text',
+        'dropdown',
+        'value',
+        'email',
+        'list'
+    ],
+    defaultAnswerType: 'yesNoMaybe'
 }

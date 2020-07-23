@@ -1,4 +1,5 @@
 const { mongoose } = require('../../db/connection');
+const constants = require('../../constants');
 const Schema = mongoose.Schema;
 
 const responseSchema = new mongoose.Schema({
@@ -13,20 +14,8 @@ const responseSchema = new mongoose.Schema({
             answer: Schema.Types.Mixed,
             answerType:  {
                 type: String,
-                enum: [
-                    'binary',
-                    'rating',
-                    'yesNoMaybe',
-                    'slider',
-                    'radioButton',
-                    'checkbox',
-                    'smiley',
-                    'text',
-                    'dropdown',
-                    'value',
-                    'email'
-                ],
-                default: 'binary'
+                enum: constants.answerTypes,
+                default: constants.defaultAnswerType
             },
             decimalPlaces: Number,
             minValue: Number,

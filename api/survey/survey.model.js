@@ -1,4 +1,5 @@
 const { mongoose } = require('../../db/connection');
+const constants = require('../../constants');
 
 const surveySchema = new mongoose.Schema({
     questions: [
@@ -9,20 +10,8 @@ const surveySchema = new mongoose.Schema({
             }],
             answerType: {
                 type: String,
-                enum: [
-                    'binary',
-                    'rating',
-                    'yesNoMaybe',
-                    'slider',
-                    'radioButton',
-                    'checkbox',
-                    'smiley',
-                    'text',
-                    'dropdown',
-                    'value',
-                    'email'
-                ],
-                default: 'binary'
+                enum: constants.answerTypes,
+                default: constants.defaultAnswerType
             },
             decimalPlaces: Number,
             minValue: Number,
@@ -33,7 +22,8 @@ const surveySchema = new mongoose.Schema({
             },
             allowOtherAnswer: Boolean,
             radioToDropdown: Boolean,
-            additionalText: String
+            additionalText: String,
+            listElements: String
         }
     ],
 
