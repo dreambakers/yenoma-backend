@@ -26,5 +26,18 @@ module.exports = {
         'email',
         'list'
     ],
-    defaultAnswerType: 'yesNoMaybe'
+    defaultAnswerType: 'yesNoMaybe',
+    subscriptionPeriods: [{
+        key: 'oneMonth',
+        duration: 30,
+        price: 10
+    }, {
+        key: 'threeMonths',
+        duration: 90,
+        price: 30
+    },{
+        key: 'oneYear',
+        duration: 365,
+        price: 60
+    }]
 }
