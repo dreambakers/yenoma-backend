@@ -30,6 +30,9 @@ head
       font-weight: bold;
     }
 
+#preview_text(style='display:none!important;font-size:1px;color:#FFFFFF;lineheight:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;')
+  | !{translate(`${language}`, 'messages', 'previewText')}
+
 table(width='100%' border='0' cellspacing='0' cellpadding='0')
   tr
     td(align='center')

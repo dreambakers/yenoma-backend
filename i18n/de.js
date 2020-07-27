@@ -7,6 +7,7 @@ module.exports = {
         youCanChangePassword: "You can change your password by clicking on the link below within 48 hours. _de",
         feedbackReceivedFromYenomaUser: "feedback received from yenoma user _de",
         emailConfirmation: "Please confirm that {{email}} is your email address by clicking on the link below within 48 hours _de",
+        previewText: "Text goes here _de"
     },
 
     labels: {
