@@ -14,16 +14,18 @@ const capturePayment = async (req, res) => {
         const capture = await payPalClient.client().execute(request);
 
         if (capture.result.status === 'COMPLETED') {
-            req.user.subscription.expires = moment(req.user.subscription.expires).add(subscriptionPeriod.duration, 'days').toISOString();
-            await req.user.save();
+            const user = req.user;
+            const baseDate = new Date() < new Date(user.subscription.expires) ? user.subscription.expires : new Date();
+            user.subscription.expires = moment(baseDate).add(subscriptionPeriod.duration, 'days').toISOString();
+            await user.save();
             const newPayment = new Payment({
                 result: capture.result,
-                for: req.user._id
+                for: user._id
             });
             await newPayment.save();
             return res.json({
                 success: 1,
-                user: req.user
+                user
             });
         }
     } catch (error) {
