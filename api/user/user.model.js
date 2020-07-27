@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const constants = require('../../constants');
+const moment = require('moment');
 
 const UserSchema = new mongoose.Schema({
     username: {
@@ -50,7 +51,7 @@ const UserSchema = new mongoose.Schema({
     subscription: {
         expires: {
             type: Date,
-            default: new Date().setDate(new Date().getDate() + constants.newUserSubscriptionPeriod)
+            default: moment().add(30, 'days').utc()
         }
     },
     readonly: Boolean
