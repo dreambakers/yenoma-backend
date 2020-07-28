@@ -51,7 +51,7 @@ const UserSchema = new mongoose.Schema({
     subscription: {
         expires: {
             type: Date,
-            default: moment().add(30, 'days').utc()
+            default: moment().add(30, 'days')
         }
     },
     readonly: Boolean
