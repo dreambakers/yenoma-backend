@@ -1,7 +1,7 @@
 const Email = require('email-templates');
 const path = require('path');
-const { translate } = require('../utility/translate');
-const constants = require('../../constants');
+const { translate } = require('./translate');
+const constants = require('../constants');
 
 const sendEmail = async (to, subjectKey, template, locals, language = 'en') => {
     try {

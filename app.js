@@ -5,6 +5,7 @@ const cors = require('cors');
 const fs = require('fs');
 require('dotenv').config();
 const routes = require('./routes/routes');
+const { performPostStartTasks } = require('./utility/utility');
 
 const app = express();
 app.use(cors({origin:true,credentials: true})); // allow cors headers
@@ -36,6 +37,10 @@ const server = https.createServer(options, app);
 
 server.listen(port, () => {
   console.log(`Server running on port ${port}`);
+});
+
+server.on('listening', () => {
+  performPostStartTasks();
 });
 
 module.exports = { app }

@@ -1,4 +1,4 @@
-var languages = require("../../i18n");
+var languages = require("../i18n");
 
 translate = (language, key, subkey, inject = []) => {
     let translatedText;

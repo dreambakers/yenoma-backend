@@ -1,8 +1,8 @@
 const { mongoose } = require('../../db/connection');
+const { getGlobalSettings } = require('../../utility/utility');
 const jwt = require('jsonwebtoken');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
-const constants = require('../../constants');
 const moment = require('moment');
 
 const UserSchema = new mongoose.Schema({
@@ -50,8 +50,7 @@ const UserSchema = new mongoose.Schema({
     passwordResetToken: String,
     subscription: {
         expires: {
-            type: Date,
-            default: () => moment().add(30, 'days')
+            type: Date
         }
     },
     readonly: Boolean
@@ -125,12 +124,15 @@ UserSchema.statics.findByCredentials = function (email, password) {
     });
 };
 
-UserSchema.pre('save', function (next) {   //mongoose middleware, this is going to run before save is called
-
+UserSchema.pre('save', async function (next) {   //mongoose middleware, this is going to run before save is called
     let user = this;
 
-    if (user.isModified('password')) {    //checking to see if password is already hashed
+    if (!user.subscription.expires) {
+        const globalSettings = await getGlobalSettings();
+        user.subscription.expires = moment().add(globalSettings.newUserSubscriptionPeriod, 'days');
+    }
 
+    if (user.isModified('password')) {    //checking to see if password is already hashed
         bcrypt.genSalt(10, (err, salt) => {
             bcrypt.hash(user.password, salt, (err, hash) => {
                 user.password = hash;
