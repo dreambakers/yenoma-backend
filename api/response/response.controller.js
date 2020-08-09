@@ -40,18 +40,17 @@ const getResponseForSurvey = async ( { params, user }, res) => {
     try {
         const responses = await Response.find(
             { for: params.pollId }
-        ).populate('for');
+        ).populate({
+            path: 'for',
+            select: '_id',
+            match: { createdBy: user._id }
+        });
 
         if (responses.length) {
-            const filteredResponses = responses.filter(
-                response => response.for.createdBy.toString() === user._id.toString()
-            );
-            if (filteredResponses.length) {
-                return res.json({
-                    success: 1,
-                    responses
-                });
-            }
+            return res.json({
+                success: 1,
+                responses
+            });
         }
         throw { msg: `No response found against SurveyID: ${params.pollId}` };
     } catch (error) {
