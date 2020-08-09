@@ -129,7 +129,8 @@ UserSchema.pre('save', async function (next) {   //mongoose middleware, this is 
 
     if (!user.subscription.expires) {
         const globalSettings = await getGlobalSettings();
-        user.subscription.expires = moment().add(globalSettings.newUserSubscriptionPeriod, 'days');
+        const date = moment(globalSettings.newUserSubscriptionExpDate || null);
+        user.subscription.expires = date.isValid() ? date : moment().add(globalSettings.newUserSubscriptionPeriod, 'days');
     }
 
     if (user.isModified('password')) {    //checking to see if password is already hashed
