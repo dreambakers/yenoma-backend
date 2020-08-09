@@ -58,15 +58,10 @@ const getSurvey = async (req, res) => {
 
 const manageSurvey = async (req, res) => {
     try {
-        const results = await Promise.all([
-            Survey.findOne({ _id: req.params.id, createdBy: req.user._id }).populate('createdBy'),
-            Response.find({for: req.params.id})
-        ]);
-
+        const poll = await Survey.findOne({ _id: req.params.id, createdBy: req.user._id }).populate('createdBy');
         res.json({
-            success: !!results[0],
-            poll: results[0],
-            responses: results[1]
+            success: !!poll,
+            poll
         });
     } catch (error) {
         console.log(error);
