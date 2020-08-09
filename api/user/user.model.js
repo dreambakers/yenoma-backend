@@ -124,15 +124,8 @@ UserSchema.statics.findByCredentials = function (email, password) {
     });
 };
 
-UserSchema.pre('save', async function (next) {   //mongoose middleware, this is going to run before save is called
+UserSchema.pre('save', function (next) {   //mongoose middleware, this is going to run before save is called
     let user = this;
-
-    if (!user.subscription.expires) {
-        const globalSettings = await getGlobalSettings();
-        const date = moment(globalSettings.newUserSubscriptionExpDate || null);
-        user.subscription.expires = date.isValid() ? date : moment().add(globalSettings.newUserSubscriptionPeriod, 'days');
-    }
-
     if (user.isModified('password')) {    //checking to see if password is already hashed
         bcrypt.genSalt(10, (err, salt) => {
             bcrypt.hash(user.password, salt, (err, hash) => {
@@ -140,9 +133,19 @@ UserSchema.pre('save', async function (next) {   //mongoose middleware, this is 
                 next();
             });
         });
+    } else {
+        next();
     }
+});
 
-    else {
+UserSchema.pre('save', async function (next) {
+    let user = this;
+    if (!user.subscription.expires) {
+        const globalSettings = await getGlobalSettings();
+        const date = moment(globalSettings.newUserSubscriptionExpDate || null);
+        user.subscription.expires = date.isValid() ? date : moment().add(globalSettings.newUserSubscriptionPeriod, 'days');
+        next();
+    } else {
         next();
     }
 });
