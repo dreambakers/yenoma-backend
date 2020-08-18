@@ -129,21 +129,15 @@ const updateProfile = async (req, res) => {
     try {
         const newProfile = { ...req.body };
 
-        if (newProfile.email || newProfile.username) {
-            const results = await Promise.all([
-                User.findOne({ email: newProfile.email, _id: { $ne: req.user._id } }),
-                User.findOne({ username: newProfile.username, _id: { $ne: req.user._id } })
-            ]);
-
-            if (results[0] || results[1]) {
+        if (newProfile.username) {
+            const user = User.findOne({ username: newProfile.username, _id: { $ne: req.user._id } })
+            if (user) {
                 return res.status(400).send({
                     alreadyExists: 1,
-                    email: !!results[0],
-                    username: !!results[1],
+                    username: !!user,
                     success: 0
                 });
             }
-
         }
 
         delete newProfile['_id'];
