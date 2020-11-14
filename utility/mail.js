@@ -16,11 +16,11 @@ const sendEmail = async (to, subjectKey, template, locals, language = 'en') => {
             locals: { ...locals, translate, language },
             send: true,
             transport: {
-                host: "smtp.strato.de",
+                host: "yenoma.com",
                 port: 465,
                 secure: true, // true for 465, false for other ports
                 auth: {
-                  user: 'noreply@yenoma.com', // generated ethereal user
+                  user: process.env.EMAIL, // generated ethereal user
                   pass: process.env.EMAIL_PASS, // generated ethereal password
                 },
             }
