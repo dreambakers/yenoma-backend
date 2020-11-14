@@ -1,8 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const https = require('https');
 const cors = require('cors');
-const fs = require('fs');
 require('dotenv').config();
 const routes = require('./routes/routes');
 const { performPostStartTasks } = require('./utility/utility');
@@ -10,13 +8,6 @@ const { performPostStartTasks } = require('./utility/utility');
 const app = express();
 app.use(cors({origin:true,credentials: true})); // allow cors headers
 app.use(bodyParser.json());
-
-const key = fs.readFileSync(__dirname + '/certs/privkey.key');
-const cert = fs.readFileSync(__dirname + '/certs/certificate.crt');
-const options = {
-  key: key,
-  cert: cert
-};
 
 const port = process.env.PORT || 3000;
 
@@ -33,13 +24,8 @@ app.get('/', (req, res) => { res.send('API is running.') });
 
 app.use('/', routes);
 
-const server = https.createServer(options, app);
-
-server.listen(port, () => {
+app.listen(port, () => {
   console.log(`Server running on port ${port}`);
-});
-
-server.on('listening', () => {
   performPostStartTasks();
 });
 
